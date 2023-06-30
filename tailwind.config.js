@@ -5,8 +5,8 @@ module.exports = {
   ],  theme: {
     fontFamily : {
       main : ['Work Sans', 'sans-serif'],
-      headings : ['Archivo', 'sans-serif'],
-      text : ['Ranade', 'sans-serif']
+      headings : ['General Sans', 'sans-serif'],
+      text : ['Quicksand', 'sans-serif']
     },
     screens: {
       'mobile' : '375px',
