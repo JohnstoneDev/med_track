@@ -16,7 +16,8 @@ function App() {
   return (
     <div
       className="App font-main text-2xl min-h-screen min-w-screen justify-center items-center
-      flex flex-col text-slate-300 bg-gradient-to-t from-slate-600 via-zinc-800 to-zinc-900">
+      flex flex-col text-yellow-200 bg-teal-900">
+      <h1 className='font-headings text-5xl pb-5'>General Kenobi </h1>
       <Paths />
     </div>
   );
