@@ -14,13 +14,12 @@ export const SignUp = () => {
 	}
 
 	const submitForm = (e) => {
-		e.preventDefault()
-		alert(formData)
+		e.preventDefault();
 	}
 
 	return (
 		<div className="flex flex-col p-24 justify-around w-screen h-full items-center">
-			<h1 className="text-4xl p-2 border-b-2 border-b-blue-500 font-semibold">Dosage Tracker</h1>
+			<h1 className="text-4xl p-2 border-b-4 border-b-blue-500 font-semibold">Dosage Tracker</h1>
 			<form className="grid gap-2 w-[850px] justify-around rounded items-center m-2 p-12" onSubmit={submitForm}>
 					<label className="block p-2">
 						<p className="text-blue-500 w-fit font-extrabold">
@@ -70,12 +69,15 @@ export const SignUp = () => {
 					</label>
 					<span className="flex items-center justify-between p-2">
 						<button
-							className="form-input w-[200px] rounded-md p-2 bg-blue-500 font-semibold hover:bg-amber-500"
+							className="form-input w-[200px] rounded-md p-2 bg-blue-500 font-semibold hover:bg-amber-500 hover:transition-all duration-700"
 							onClick={submitForm}>
 							Sign Up
 						</button>
 						<p className="text-lg">
-							 Already have an account ? <Link to="/login" className="border-b-2 border-b-blue-500 hover:border-b-amber-400 hover:text-amber-400 font-semibold text-blue-500">Log In</Link>
+							 Already have an account ? <Link
+							 to="/login"
+							 className="border-b-4 border-b-blue-500 hover:border-b-amber-400 hover:text-amber-400
+							 font-semibold text-blue-500  hover:transition-all duration-500">Log In</Link>
 						</p>
 					</span>
 			</form>
