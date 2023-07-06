@@ -1,11 +1,26 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import {
+	useState,
+	useContext
+ } from "react";
+
+import {
+	Link,
+	useNavigate
+ } from "react-router-dom";
+import { ApplicationContext } from "../App";
 
 export const LogIn = () => {
+	const { dispatch } = useContext(ApplicationContext);
+
+	const navigate = useNavigate()
+
 	const [ formData, setFormData ] = useState({
 		username : '',
 		password : ''
 	});
+
+	const [ error, setError ] = useState("");
+	const [ hideError, setHideError ] = useState(true)
 
 	const changeEvent = (e) => {
 		e.preventDefault()
@@ -13,7 +28,51 @@ export const LogIn = () => {
 	}
 
 	const submitForm = (e) => {
-		e.preventDefault()
+		e.preventDefault();
+
+		if (formData.username && formData.password !== "") {
+			fetch('/login',{
+				method : 'POST',
+				headers : {
+					'Content-Type' : 'application/json'
+				},
+				body : JSON.stringify(formData)
+			})
+			.then(r => {
+				if(r.ok) {
+					r.json().then(user => {
+						dispatch({
+							type : 'LOGIN',
+							payload : user
+						})
+						navigate('/')
+					})
+					throw r;
+				}
+				else {
+					r.json().then(d => {
+
+						setHideError(false)
+						setError(d.error)
+
+						setTimeout(() => {
+							setHideError(true)
+							setError("")
+						},3000)
+
+					})
+				}
+			})
+		}
+		else {
+			setHideError(false)
+			setError("Please Input Username & Password");
+
+			setTimeout(() => {
+				setHideError(true)
+				setError("")
+			},5000)
+		}
 	}
 
 	return (
@@ -35,7 +94,7 @@ export const LogIn = () => {
 							value={formData.username}
 							onChange={changeEvent}
 							className="form-input rounded-md block w-[500px] text-black"
-							placeholder="Choose a unique username"
+							placeholder="Enter your username"
 							/>
 					</label>
 
@@ -49,7 +108,7 @@ export const LogIn = () => {
 							value={formData.password}
 							onChange={changeEvent}
 							className="form-input rounded-md block w-full text-black"
-							placeholder="Create a strong password"
+							placeholder="Enter your password"
 							/>
 					</label>
 					<span className="flex items-center justify-between p-2">
@@ -59,13 +118,19 @@ export const LogIn = () => {
 							Log In
 						</button>
 						<p className="text-lg">
-							 Don't have an account ? <Link 
-							 to="/signup" 
+							 Don't have an account ? <Link
+							 to="/signup"
 							 className="font-semibold text-blue-500 border-b-4 border-b-blue-500
 							  hover:border-b-amber-400 hover:text-amber-400 hover:transition-all duration-500">Sign Up</Link>
 						</p>
 					</span>
 			</form>
+			<span
+				className="text-lg font-headings font-extrabold tracking-wider leading-loose text-red-500
+				animate-pulse p-3"
+				hidden={hideError}>
+				{ error }
+			</span>
 		</div>
 	)
 }
