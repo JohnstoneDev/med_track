@@ -1,12 +1,31 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import {
+	useContext,
+	useState
+} from "react";
+
+import {
+	 Link,
+	 useNavigate
+} from "react-router-dom";
+
+import { ApplicationContext } from "../App";
 
 export const SignUp = () => {
+	const { dispatch } = useContext(ApplicationContext);
+
+	const navigate = useNavigate()
+
 	const [ formData, setFormData ] = useState({
 		username : '',
 		email : "",
 		password : ''
 	});
+
+	const [ errors, setErrors ] = useState([]);
+	const [ hideErrors, setHideErrors ] = useState(true);
+
+	const [ message, setMessage ] = useState("");
+	const [ hideMessage, setHideMessage ] = useState(true)
 
 	const changeEvent = (e) => {
 		e.preventDefault()
@@ -15,6 +34,52 @@ export const SignUp = () => {
 
 	const submitForm = (e) => {
 		e.preventDefault();
+
+		if (formData.username && formData.email && formData.password !== ""){
+					fetch('/users',{
+						method : 'POST',
+						headers : {
+							'Content-Type' : 'application/json'
+						},
+						body : JSON.stringify(formData)
+					})
+					.then(r => {
+						if (r.ok) {
+							r.json().then((user) => {
+								dispatch({
+									type : 'SIGNUP',
+									payload : user
+								});
+								navigate('/')
+
+								throw r;
+							})
+						}
+						else {
+							r.json().then(d => {
+
+								setHideErrors(false)
+								setErrors(d.errors)
+
+								setTimeout(() => {
+									setHideErrors(true)
+									setErrors([])
+								},5000)
+
+							})
+						}
+					})
+
+		}
+		else {
+			setHideMessage(false);
+			setMessage("Make sure all form inputs are properly filled");
+
+			setTimeout(() => {
+				setHideMessage(true);
+				setMessage("")
+			},3000)
+		}
 	}
 
 	return (
@@ -81,6 +146,17 @@ export const SignUp = () => {
 						</p>
 					</span>
 			</form>
+			<div hidden={hideErrors}>
+					{
+						errors.map((err) =>
+								<p className="text-lg font-headings font-extrabold tracking-wider leading-loose text-red-500 animate-pulse" key={errors.err}>
+									{err}
+								</p>)
+					}
+			</div>
+			<span hidden={hideMessage} className="text-lg font-headings font-extrabold tracking-wider leading-loose text-red-500 animate-pulse p-3 text-center">
+					{ message }
+			</span>
 		</div>
 	)
 }
