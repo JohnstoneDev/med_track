@@ -24,7 +24,7 @@ const reducer = (state, action) => {
         ...state,
         loggedIn : true,
         user : action.payload
-      }
+      };
     case 'LOGIN' :
       return {
         ...state,
@@ -64,7 +64,7 @@ function App() {
 
   return (
       <div
-        className="font-main text-2xl min-h-screen min-w-screen items-center space-y-4 bg-neutral-900 text-white overflow-hidden">
+        className="font-main text-2xl min-h-screen min-w-screen items-center space-y-4 bg-neutral-900 text-rose-100 overflow-hidden leading-loose tracking-wide">
           <ApplicationContext.Provider value={{ state, dispatch}}>
              <Paths />
           </ApplicationContext.Provider>
